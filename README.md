@@ -77,7 +77,7 @@ GROQ_API_KEY=your_api_key
 Open:
 
 ```bash
-RAG_Pipeline.ipynb
+RAG.ipynb
 ```
 
 Run all cells sequentially.
