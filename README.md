@@ -84,13 +84,47 @@ Run all cells sequentially.
 
 ---
 
-## 📈 Pipeline
+## 📈 RAG Pipeline
 
-1. Load PDF
-2. Split into chunks
-3. Generate embeddings
-4. Store vectors in ChromaDB
-5. Retrieve relevant chunks
-6. Generate answer using Groq LLM
+### 1. Document Loading
+The system loads the PDF document using LangChain's `PyPDFLoader`. Each page is extracted and converted into a structured document object.
 
----
+### 2. Text Chunking
+The extracted text is divided into smaller overlapping chunks using `RecursiveCharacterTextSplitter`.
+
+Benefits:
+- Better retrieval accuracy
+- Fits embedding model limits
+- Preserves context through overlap
+
+### 3. Embedding Generation
+Each chunk is converted into a dense vector representation using the HuggingFace embedding model:
+
+```text
+sentence-transformers/all-MiniLM-L6-v2
+```
+
+The embedding captures the semantic meaning of the text.
+
+### 4. Vector Storage
+The generated embeddings are stored in ChromaDB, a vector database optimized for similarity search.
+
+Each record contains:
+- Chunk text
+- Embedding vector
+- Metadata
+
+### 5. User Query Processing
+When a user asks a question, the query is embedded using the same embedding model to ensure both documents and queries exist in the same vector space.
+
+### 6. Retrieval
+ChromaDB performs similarity search and retrieves the top-k most relevant chunks related to the user's question.
+
+### 7. Context Augmentation
+The retrieved chunks are combined and inserted into a prompt template along with the user question.
+
+### 8. Answer Generation
+The augmented prompt is sent to the Groq-hosted Qwen3-32B model, which generates an answer grounded in the retrieved context.
+
+### 9. Final Response
+The generated response is returned to the user along with information retrieved from the PDF, reducing hallucinations and improving factual accuracy.
