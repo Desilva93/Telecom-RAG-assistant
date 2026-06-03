@@ -40,7 +40,7 @@ An end-to-end Retrieval-Augmented Generation (RAG) system that answers questions
 ```bash
 telecom-rag-assistant/
 ├── telecom_guide.pdf
-├── RAG_Pipeline.ipynb
+├── RAG.ipynb
 ├── .env
 ├── .gitignore
 ├── LICENSE
